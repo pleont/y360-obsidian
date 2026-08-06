@@ -32,9 +32,6 @@
 - **Обходной путь NameID**: парсер SAML в passport-api игнорирует атрибут `email` → использовать ADFS NameID Format=Email
 - **Несовпадение доменов**: пользователь AD `@r8t.dirs.local` против Яндекс `@internal.r8t.dirs.local` → кастомное правило ADFS
 
-## Известные проблемы
+## Проблемы
 
-- `domainId` — целое число (5), не UUID из `ydir.domains`
-- SCIM-токен от `APIGW360_CLIENT_ID` → 403; использовать `SCIM_CLIENT_ID`
-- Cloud-style SCIM URL резолвится в 77.88.21.80 (публичный IP) → использовать on-premise режим
-- Атрибут ADFS `email` игнорируется парсером passport-api → обход через NameID=Email
+См. [[cases/r8t-scim-pitfalls]] — domainId, SCIM-токены, Cloud URL.

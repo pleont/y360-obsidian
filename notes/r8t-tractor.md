@@ -16,9 +16,9 @@
 - `user_migrations` — статус миграции по пользователям (org_id + login)
 - `tasks` — отдельные задачи по файлам (worker_status)
 
-## Известный баг
+## Статусы миграции
 
-`nextcloud_client.py`: `owned_by_me = owner == self.username`. Обход: логиниться по username, не email.
+`{listing, syncing, canceling, error, success}`
 
 ## Очистка при зависшей миграции
 
@@ -28,6 +28,6 @@ DELETE FROM tractor_disk.user_migrations WHERE ...;
 DELETE FROM tractor_disk.tasks WHERE ...;
 ```
 
-## Статусы миграции
+## Проблемы
 
-`{listing, syncing, canceling, error, success}`
+См. [[cases/r8t-tractor-nextcloud-bug]] — баг `owned_by_me` в nextcloud_client.py.

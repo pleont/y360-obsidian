@@ -7,7 +7,7 @@ updated: 2026-08-06
 
 # r8t Stand Map
 
-## Topology
+## Топология
 
 | Node | IP | vCPU | RAM | Disk | Role |
 |------|----|------|-----|------|------|
@@ -18,7 +18,7 @@ updated: 2026-08-06
 | r8t-infra-01 | 172.26.89.14 | 8 | 16G | 150G | PG master, Kafka, CFSSL CA, dnsmasq |
 | r8t-infra-02 | 172.26.89.15 | 8 | 16G | 150G | PG replica, OpenSearch, MinIO |
 
-## Platform
+## Платформа
 
 - **OS**: RedOS 8.0
 - **Kubernetes**: v1.30.14 (kubeadm)
@@ -27,16 +27,16 @@ updated: 2026-08-06
 - **Storage**: Longhorn (default SC)
 - **Hypervisor**: Proxmox VE @ 172.26.89.4
 
-## Network
+## Сеть
 
-- **Domain**: r8t.dirs.local
-- **Subnet**: 172.26.89.0/24
+- **Домен**: r8t.dirs.local
+- **Подсеть**: 172.26.89.0/24
 - **Ingress VIP**: 172.26.89.100
 - **Xiva VIP**: 172.26.89.102
 - **DNS**: dnsmasq @ r8t-infra-01 (172.26.89.14)
 - **AD/ADFS**: 172.26.89.19 (fs.r8t.dirs.local)
 
-## External Services
+## Внешние сервисы
 
 | Service | Host | Port | Protocol |
 |---------|------|------|----------|
@@ -46,14 +46,14 @@ updated: 2026-08-06
 | MinIO | s3.r8t.dirs.local (infra-02) | 443 | HTTPS |
 | Harbor | r8t-harbor (VMID 112) | 5000 | HTTP proxy for cr.yandex |
 
-## Access
+## Доступ
 
 - **SSH**: `croc@<ip>` (ed25519 key)
 - **Kubeconfig**: `/tmp/r8t-kubeconfig.yaml`
 - **Vault path**: `secret/croc/infra/y360/r8t/`
 - **Proxmox**: `secret/croc/infra/y360/r8t/proxmox`
 
-## Web Endpoints
+## Web-эндпоинты
 
 - Admin: `https://admin.r8t.dirs.local`
 - Passport: `https://passport.r8t.dirs.local`

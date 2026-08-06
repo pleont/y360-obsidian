@@ -5,7 +5,7 @@
 
 # r8t Kafka
 
-## Развёртывание
+## Описание
 
 - **Хост**: r8t-infra-01 (172.26.89.14)
 - **Версия**: 3.5.2
@@ -35,8 +35,6 @@ kubectl exec -n infra deploy/infra-operator-kafka-controller -- \
   --command-config /opt/kafka/config/client-ssl.properties --list
 ```
 
-## Особенности DNS
+## Проблемы
 
-Wildcard dnsmasq на r8t-infra-01 перехватывает `kafka.r8t.dirs.local` → резолвится в ingress VIP (172.26.89.100) вместо IP infra-01. Явная запись `address=/kafka.r8t.dirs.local/172.26.89.14` должна быть до строки с wildcard.
-
-Расширение search-домена: `kafka.r8t.dirs.local` из подов с `search r8t.dirs.local` → превращается в `kafka.r8t.dirs.local.r8t.dirs.local` → попадает на wildcard VIP. Исправлено через kubelet `resolvConf` без домена стенда.
+См. [[cases/r8t-kafka-dns-search-bug]] — расширение search-домена и конфликт с wildcard dnsmasq.
