@@ -1,0 +1,6 @@
+.env
+*.log
+*.tskv
+*.tmp
+.cache/
+.auth.json
