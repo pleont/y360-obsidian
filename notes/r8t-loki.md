@@ -1,20 +1,20 @@
 ---
-stand: r8t
-updated: 2026-08-06
+стенд: r8t
+обновлено: 2026-08-06
 ---
 
-# r8t Loki PVC Full Recovery
+# r8t Loki — переполнение PVC
 
-## Symptom
+## Симптомы
 
-- Loki pod `CrashLoopBackOff`
-- `infra-sync-workflow` fails at loki step (exit code 20)
-- Root cause: PVC (20Gi) filled with chunks + WAL
+- Под Loki `CrashLoopBackOff`
+- `infra-sync-workflow` падает на шаге loki (код выхода 20)
+- Причина: PVC (20Gi) заполнен chunks + WAL
 
-## Recovery Procedure
+## Процедура восстановления
 
-1. Scale down: `kubectl scale sts -n monitoring loki --replicas=0`
-2. Create debug pod mounting the PVC:
+1. Уменьшить реплики: `kubectl scale sts -n monitoring loki --replicas=0`
+2. Создать отладочный под с монтированием PVC:
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -35,6 +35,6 @@ spec:
           mountPath: /data
 ```
 3. `kubectl exec -n monitoring loki-cleanup -- rm -rf /data/chunks/ /data/wal/`
-4. Delete debug pod, scale Loki back to 1
-5. Verify: `kubectl logs -n monitoring loki-0`
-6. No installer rerun needed
+4. Удалить отладочный под, вернуть Loki 1 реплику
+5. Проверить: `kubectl logs -n monitoring loki-0`
+6. Перекат установки НЕ требуется

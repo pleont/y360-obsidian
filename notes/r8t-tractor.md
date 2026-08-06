@@ -1,36 +1,33 @@
 ---
-stand: r8t
-updated: 2026-08-06
+стенд: r8t
+обновлено: 2026-08-06
 ---
 
-# r8t Tractor Migration (Nextcloud → Disk)
+# r8t Tractor — миграция Nextcloud → Disk
 
-## Database
+## База данных
 
-- **DB**: `tractor-tractordb-r8t` on PostgreSQL master
-- **User**: `http-api`
-- **Schema**: `tractor_disk`
+- **БД**: `tractor-tractordb-r8t` на мастере PostgreSQL
+- **Пользователь**: `http-api`
+- **Схема**: `tractor_disk`
 
-## Tables
+## Таблицы
 
-- `user_migrations` — per-user migration status (org_id + login)
-- `tasks` — individual file tasks (worker_status)
+- `user_migrations` — статус миграции по пользователям (org_id + login)
+- `tasks` — отдельные задачи по файлам (worker_status)
 
-## Known Bug
+## Известный баг
 
-`nextcloud_client.py` uses `owned_by_me = owner == self.username`. 
-Workaround: login with username, not email.
+`nextcloud_client.py`: `owned_by_me = owner == self.username`. Обход: логиниться по username, не email.
 
-## Cleanup Procedure
-
-When migration is stuck or needs restart:
+## Очистка при зависшей миграции
 
 ```sql
--- Order matters: delete children first
+-- Порядок важен: сначала дочерние записи
 DELETE FROM tractor_disk.user_migrations WHERE ...;
 DELETE FROM tractor_disk.tasks WHERE ...;
 ```
 
-## Status Enum
+## Статусы миграции
 
 `{listing, syncing, canceling, error, success}`

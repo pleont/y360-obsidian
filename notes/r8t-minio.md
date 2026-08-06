@@ -1,27 +1,24 @@
 ---
-stand: r8t
-updated: 2026-08-06
+стенд: r8t
+обновлено: 2026-08-06
 ---
 
 # r8t MinIO
 
-## Deployment
+## Развёртывание
 
-- **Host**: r8t-infra-02 (172.26.89.15)
+- **Хост**: r8t-infra-02 (172.26.89.15)
 - **Endpoint**: `https://s3.r8t.dirs.local:443`
-- **Protocol**: HTTPS
-- **Migration**: port changed from 9000 → 443 (2026-08-05)
+- **Протокол**: HTTPS
+- **Миграция**: порт изменён с 9000 → 443 (2026-08-05)
 
-## Migration Event (2026-08-05)
+## Миграция порта (2026-08-05)
 
-- MinIO migrated to port 443
-- Fix confirmed for Forms `SignatureDoesNotMatch` — temporal-worker creates all 7 thumbnail sizes with 200 on :443
-- Product configs still need installer rerun: 13 resources across 6 namespaces carry old `:9000` endpoint
-- forms-uploader PVC fsck'd on r8t-k8s-04, now healthy
+MinIO перенесён на порт 443. Исправление подтверждено для Forms `SignatureDoesNotMatch` — temporal-worker создаёт все 7 размеров миниатюр с кодом 200 на :443. В конфигах продуктов остались старые ссылки — требуется перекат установки: 13 ресурсов в 6 namespace несут старый endpoint `:9000`. PVC forms-uploader проверен fsck на r8t-k8s-04, здоров.
 
-## Products with Stale :9000 References
+## Продукты с устаревшими ссылками :9000
 
-After installer rerun, verify no product still references `:9000`:
+После переката установки проверить, что ни один продукт не ссылается на `:9000`:
 ```bash
 kubectl get configmap,secret -A -o yaml | grep ':9000'
 ```

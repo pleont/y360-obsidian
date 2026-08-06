@@ -1,40 +1,40 @@
 ---
-stand: r8t
-updated: 2026-08-06
+стенд: r8t
+обновлено: 2026-08-06
 ---
 
 # r8t AD / SCIM
 
 ## Active Directory
 
-- **Host**: fs.r8t.dirs.local → 172.26.89.19
+- **Хост**: fs.r8t.dirs.local → 172.26.89.19
 - **Base DN**: `DC=r8t,DC=dirs,DC=local`
-- **LDAP**: port 389 (plain, not LDAPS)
-- **DNS**: explicit dnsmasq entry before wildcard
+- **LDAP**: порт 389 (без LDAPS)
+- **DNS**: явная запись в dnsmasq до wildcard
 
-## SCIM Configuration
+## SCIM
 
-- **Domain ID**: 5 (Blackbox domid, NOT org_id=6)
-- **Mode**: on-premise (env var override)
+- **ID домена**: 5 (Blackbox domid, НЕ org_id=6)
+- **Режим**: on-premise (через переменные окружения)
 - **SCIM API**: `http://passport-scim-api.passport-r8t.svc.cluster.local:8080/Domain/5/v2`
-- **Token source**: `oauth.r8t.dirs.local/token` with `grant_type=client_credentials`
-- **SCIM client IDs**: from post-install workflow output (`SCIM_CLIENT_ID`, `SCIM_CLIENT_SECRET`)
+- **Токен**: `oauth.r8t.dirs.local/token` с `grant_type=client_credentials`
+- **Клиенты SCIM**: из вывода post-install workflow (`SCIM_CLIENT_ID`, `SCIM_CLIENT_SECRET`)
 
-## ADSCIM Deployment
+## Развёртывание ADSCIM
 
-- Run as Kubernetes Job in `passport-r8t` namespace (Calico policy)
-- Env vars: `ADSCIM_DESTINATION_SCIM_BASE_URL`, `ADSCIM_DESTINATION_SCIM_BEARER_TOKEN_VALUE`, `ADSCIM_SOURCE_LDAP_PASSWORD_VALUE`
-- First run MUST be `dryRun: true`
+- Запускается как Kubernetes Job в namespace `passport-r8t` (ограничение Calico)
+- Переменные: `ADSCIM_DESTINATION_SCIM_BASE_URL`, `ADSCIM_DESTINATION_SCIM_BEARER_TOKEN_VALUE`, `ADSCIM_SOURCE_LDAP_PASSWORD_VALUE`
+- Первый запуск ОБЯЗАТЕЛЬНО `dryRun: true`
 
 ## SAML SSO
 
-- **Org 6** has SSO enabled (`is_sso_enabled: true`, `provisioning_enabled: false`)
-- **NameID workaround**: passport-api SAML parser ignores `email` attribute → use ADFS NameID Format=Email
-- **Domain mismatch**: AD user `@r8t.dirs.local` vs Yandex `@internal.r8t.dirs.local` → ADFS custom transform rule
+- **Организация 6**: SSO включён (`is_sso_enabled: true`, `provisioning_enabled: false`)
+- **Обходной путь NameID**: парсер SAML в passport-api игнорирует атрибут `email` → использовать ADFS NameID Format=Email
+- **Несовпадение доменов**: пользователь AD `@r8t.dirs.local` против Яндекс `@internal.r8t.dirs.local` → кастомное правило ADFS
 
-## Pitfalls
+## Известные проблемы
 
-- `domainId` is integer (5), not UUID from `ydir.domains`
-- SCIM token from `APIGW360_CLIENT_ID` → 403; use `SCIM_CLIENT_ID`
-- Cloud-style SCIM URL resolves to 77.88.21.80 (public IP) → use on-premise mode
-- ADFS `email` attribute ignored by passport-api parser → NameID=Email workaround
+- `domainId` — целое число (5), не UUID из `ydir.domains`
+- SCIM-токен от `APIGW360_CLIENT_ID` → 403; использовать `SCIM_CLIENT_ID`
+- Cloud-style SCIM URL резолвится в 77.88.21.80 (публичный IP) → использовать on-premise режим
+- Атрибут ADFS `email` игнорируется парсером passport-api → обход через NameID=Email
